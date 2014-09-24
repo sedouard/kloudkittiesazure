@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+  script(type="text/javascript").
+
+    //no authentication needed because we elected not to require authentication on the API
+    $.get("http://azblobstoragedemo.azurewebsites.net/photos", function(data){
+      
+        console.log(data);
+        
+        for(var i in data.entries){
+          document.getElementById("photoparagraph").innerHTML = 
+            document.getElementById("photoparagraph").innerHTML + "<p>" + data.entries[i].name + "</p>";
+            console.log();
+            document.getElementById("photoparagraph").innerHTML = document.getElementById("photoparagraph").innerHTML + '<img src=\"' + '#{blobBaseUrl}' + '/' + data.entries[i].name + '\"/>';
+        }
+      
+      })
+      .fail(function(err){
+        console.log(err);
+      }); 
+  
+  form(action="/photos", method="post", enctype="multipart/form-data")
+    input(type="text", name="filename")
+    input(type="file", name="uploadImage")
+    input(type="submit", value="Submit")
+    
+  h3 Current Photos
+  div#photoparagraph
