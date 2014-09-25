@@ -2,9 +2,9 @@ var express = require('express');
 var router = express.Router();
 var azure = require('azure-storage');
 global.host = 'dpeproject' + '.blob.core.windows.net';
-global.blobService = azure.createBlobService('dpeproject', 
-'yeJ0vTR+oGq+h4alo0bJ1WYCXYBEnqGZ8/fGAPR1ytAlQDUgMFHHwVEmd+JBZIwhGrXkhsZyhQ2HeJf2c4f7cg==', global.host);
-
+global.blobService = azure.createBlobService(process.env.CONTAINER_NAME, 
+process.env.STORAGE_KEY, global.host);
+console.log('Storage key: ' + process.env.STORAGE_KEY);
 global.blobService.createContainerIfNotExists('taskcontainer', {publicAccessLevel : 'blob'}, function(error, result, response){
     if(error){
         return console.log(error);
